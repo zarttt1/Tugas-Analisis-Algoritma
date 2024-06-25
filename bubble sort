@@ -5,40 +5,30 @@
 using namespace std;
 using namespace std::chrono;
 
-int partition(int arr[], int low, int high)
+void bubbleSort(int arr[], int n)
 {
-    int pivot = arr[high];
-    int i = low - 1;
-
-    for (int j = low; j <= high - 1; ++j)
+    for (int i = 0; i < n - 1; ++i)
     {
-        if (arr[j] <= pivot)
+        bool swapped = false;
+        for (int j = 0; j < n - i - 1; ++j)
         {
-            ++i;
-            swap(arr[i], arr[j]);
+            if (arr[j] > arr[j + 1])
+            {
+                swap(arr[j], arr[j + 1]);
+                swapped = true;
+            }
         }
-    }
-    swap(arr[i + 1], arr[high]);
-    return i + 1;
-}
-
-void quickSort(int arr[], int low, int high)
-{
-    if (low < high)
-    {
-        int pi = partition(arr, low, high);
-
-        quickSort(arr, low, pi - 1);
-        quickSort(arr, pi + 1, high);
+        if (!swapped)
+            break;
     }
 }
 
 void generateRandomArray(int arr[], int n)
 {
-    srand(time(0));
+    srand(time(0)); // Seed for random number generation
     for (int i = 0; i < n; ++i)
     {
-        arr[i] = rand() % 1000;
+        arr[i] = rand() % 1000; // Generating random numbers between 0 and 999
     }
 }
 
@@ -106,7 +96,7 @@ int main()
             }
 
             auto start = high_resolution_clock::now();
-            quickSort(arr, 0, n - 1);
+            bubbleSort(arr, n);
             auto stop = high_resolution_clock::now();
             auto duration = duration_cast<milliseconds>(stop - start);
 
