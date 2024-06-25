@@ -1,0 +1,119 @@
+#include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <chrono>
+using namespace std;
+using namespace std::chrono;
+
+void insertionSort(int arr[], int n)
+{
+    for (int i = 1; i < n; ++i)
+    {
+        int key = arr[i];
+        int j = i - 1;
+
+        while (j >= 0 && arr[j] > key)
+        {
+            arr[j + 1] = arr[j];
+            j--;
+        }
+
+        arr[j + 1] = key;
+    }
+}
+
+void generateRandomArray(int arr[], int n)
+{
+    srand(time(0));
+    for (int i = 0; i < n; ++i)
+    {
+        arr[i] = rand() % 1000;
+    }
+}
+
+void generateSortedArray(int arr[], int n)
+{
+    for (int i = 0; i < n; ++i)
+    {
+        arr[i] = i;
+    }
+}
+
+void generateReverseSortedArray(int arr[], int n)
+{
+    for (int i = 0; i < n; ++i)
+    {
+        arr[i] = n - i - 1;
+    }
+}
+
+void printArray(int arr[], int n)
+{
+    for (int i = 0; i < n; ++i)
+    {
+        cout << arr[i] << " ";
+    }
+    cout << endl;
+}
+
+int main()
+{
+    int sizes[] = {10, 100, 500, 1000, 10000};
+    int num_sizes = sizeof(sizes) / sizeof(sizes[0]);
+
+    for (int k = 0; k < num_sizes; ++k)
+    {
+        int n = sizes[k];
+
+        int *arr_random = new int[n];
+        int *arr_sorted = new int[n];
+        int *arr_reverse_sorted = new int[n];
+
+        generateRandomArray(arr_random, n);
+        generateSortedArray(arr_sorted, n);
+        generateReverseSortedArray(arr_reverse_sorted, n);
+
+        for (int t = 0; t < 3; ++t)
+        {
+            int *arr = nullptr;
+            string type;
+
+            switch (t)
+            {
+            case 0:
+                arr = arr_random;
+                type = "Random";
+                break;
+            case 1:
+                arr = arr_sorted;
+                type = "Sorted";
+                break;
+            case 2:
+                arr = arr_reverse_sorted;
+                type = "Reverse Sorted";
+                break;
+            }
+
+            auto start = high_resolution_clock::now();
+            insertionSort(arr, n);
+            auto stop = high_resolution_clock::now();
+            auto duration = duration_cast<milliseconds>(stop - start);
+
+            cout << "Time taken for " << type << " array of size " << n << ": " << duration.count() << " milliseconds" << endl;
+
+            // Uncomment to print sorted array (for small sizes only)
+            // if (n <= 100) {
+            //     cout << "Sorted array: ";
+            //     printArray(arr, n);
+            // }
+        }
+
+        delete[] arr_random;
+        delete[] arr_sorted;
+        delete[] arr_reverse_sorted;
+
+        cout << endl;
+    }
+
+    return 0;
+}
